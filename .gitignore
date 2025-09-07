@@ -65,8 +65,7 @@ bld/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
-# Entity Framework Core
-*Migrations/
+
 
 # NuGet
 *.nupkg
