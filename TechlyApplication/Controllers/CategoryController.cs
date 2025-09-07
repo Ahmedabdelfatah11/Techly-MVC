@@ -17,6 +17,17 @@ namespace Techly.Presentation.Controllers
             List<Category> categories = _dbContext.Categories.ToList();
             return View(categories);
         }
+        [HttpPost]
+        public IActionResult Create(Category category)
+        {
+            if(ModelState.IsValid)
+            {
+            _dbContext.Categories.Add(category);
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index");
+            }
+            return View(category);
+        }
         public IActionResult Create()
         {
             return View();
