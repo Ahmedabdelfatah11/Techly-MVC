@@ -17,5 +17,9 @@ namespace Techly.Presentation.Controllers
             List<Category> categories = _dbContext.Categories.ToList();
             return View(categories);
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
