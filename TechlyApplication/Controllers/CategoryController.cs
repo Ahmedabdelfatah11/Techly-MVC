@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Techly.BLL.Interfaces;
 using Techly.DAL.Context;
 using Techly.DAL.Models;
 
@@ -6,15 +7,15 @@ namespace Techly.Presentation.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IUnitOfWork   _unitOfWork;
 
-        public CategoryController(ApplicationDbContext dbContext)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _dbContext.Categories.ToList();
+            List<Category> categories = _unitOfWork.Category.GetAll().ToList();
             return View(categories);
         }
         public IActionResult Create()
@@ -30,8 +31,8 @@ namespace Techly.Presentation.Controllers
             //}
             if (ModelState.IsValid)
             {
-            _dbContext.Categories.Add(category);
-            _dbContext.SaveChanges();
+            _unitOfWork.Category.Add(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category created successfully";
             return RedirectToAction("Index");
             }
@@ -39,7 +40,7 @@ namespace Techly.Presentation.Controllers
         }
         public IActionResult Edit(int? id)
         {
-            Category? categoryFromDb= _dbContext.Categories.Find(id);
+            Category? categoryFromDb= _unitOfWork.Category.Get(u=>u.Id==id);
             if(id == null || id==0 || categoryFromDb == null)
             {
                 return NotFound();
@@ -51,8 +52,8 @@ namespace Techly.Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Categories.Update(category);
-                _dbContext.SaveChanges();
+                _unitOfWork.Category.Update(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category edited successfully";
                 return RedirectToAction("Index");
             }
@@ -62,7 +63,7 @@ namespace Techly.Presentation.Controllers
         
         public IActionResult Delete(int? id)
         {
-            Category? categoryFromDb= _dbContext.Categories.Find(id);
+            Category? categoryFromDb= _unitOfWork.Category.Get(u=>u.Id==id);
             if(id == null || id==0 || categoryFromDb == null)
             {
                 return NotFound();
@@ -72,13 +73,13 @@ namespace Techly.Presentation.Controllers
         [HttpPost,ActionName("Delete")]
         public IActionResult DeletePOST( int id)
         {
-            Category category=_dbContext.Categories.Find(id);
-            if(category == null)
+            Category category = _unitOfWork.Category.Get(u => u.Id == id);
+            if (category == null)
             { 
                 return NotFound();
             }
-            _dbContext.Categories.Remove(category);
-                _dbContext.SaveChanges();
+            _unitOfWork.Category.Delete(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
 
             return RedirectToAction("Index");
