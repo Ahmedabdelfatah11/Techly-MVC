@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Category\PartialView\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Areas\Admin\Views\Category\PartialView\" />
   </ItemGroup>
 
 </Project>

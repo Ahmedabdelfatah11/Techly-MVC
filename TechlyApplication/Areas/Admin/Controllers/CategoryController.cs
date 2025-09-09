@@ -3,11 +3,12 @@ using Techly.BLL.Interfaces;
 using Techly.DAL.Context;
 using Techly.DAL.Models;
 
-namespace Techly.Presentation.Controllers
+namespace Techly.Presentation.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly IUnitOfWork   _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CategoryController(IUnitOfWork unitOfWork)
         {
@@ -31,17 +32,17 @@ namespace Techly.Presentation.Controllers
             //}
             if (ModelState.IsValid)
             {
-            _unitOfWork.Category.Add(category);
-            _unitOfWork.Save();
-            TempData["success"] = "Category created successfully";
-            return RedirectToAction("Index");
+                _unitOfWork.Category.Add(category);
+                _unitOfWork.Save();
+                TempData["success"] = "Category created successfully";
+                return RedirectToAction("Index");
             }
             return View(category);
         }
         public IActionResult Edit(int? id)
         {
-            Category? categoryFromDb= _unitOfWork.Category.Get(u=>u.Id==id);
-            if(id == null || id==0 || categoryFromDb == null)
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+            if (id == null || id == 0 || categoryFromDb == null)
             {
                 return NotFound();
             }
@@ -59,23 +60,23 @@ namespace Techly.Presentation.Controllers
             }
             return View(category);
         }
-       
-        
+
+
         public IActionResult Delete(int? id)
         {
-            Category? categoryFromDb= _unitOfWork.Category.Get(u=>u.Id==id);
-            if(id == null || id==0 || categoryFromDb == null)
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+            if (id == null || id == 0 || categoryFromDb == null)
             {
                 return NotFound();
             }
             return View(categoryFromDb);
         }
-        [HttpPost,ActionName("Delete")]
-        public IActionResult DeletePOST( int id)
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int id)
         {
             Category category = _unitOfWork.Category.Get(u => u.Id == id);
             if (category == null)
-            { 
+            {
                 return NotFound();
             }
             _unitOfWork.Category.Delete(category);
