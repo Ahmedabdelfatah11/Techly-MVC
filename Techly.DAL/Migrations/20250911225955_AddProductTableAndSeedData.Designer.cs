@@ -11,7 +11,7 @@ using Techly.DAL.Context;
 namespace Techly.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250910015248_AddProductTableAndSeedData")]
+    [Migration("20250911225955_AddProductTableAndSeedData")]
     partial class AddProductTableAndSeedData
     {
         /// <inheritdoc />

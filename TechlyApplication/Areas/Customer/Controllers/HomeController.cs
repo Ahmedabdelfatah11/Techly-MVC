@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TechlyApplication.Models;
+using Techly.DAL.Models;
 
 namespace Techly.Presentation.Areas.Customer.Controllers
 {
