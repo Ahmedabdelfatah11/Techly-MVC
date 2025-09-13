@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Techly.DAL.Context;
 
@@ -11,9 +12,11 @@ using Techly.DAL.Context;
 namespace Techly.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250912194043_AddProductTableAndSeedData and AddIdentityTable")]
+    partial class AddProductTableAndSeedDataandAddIdentityTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,11 +89,6 @@ namespace Techly.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -142,10 +140,6 @@ namespace Techly.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -364,6 +358,19 @@ namespace Techly.DAL.Migrations
                         new
                         {
                             Id = 3,
+                            Brand = "Anker",
+                            CategoryId = 2,
+                            Description = "Fast charging portable power bank",
+                            ListPrice = 1500.0,
+                            Price = 1400.0,
+                            Price100 = 1200.0,
+                            Price50 = 1300.0,
+                            SKU = "ACC-001",
+                            Title = "Anker Power Bank 20000mAh"
+                        },
+                        new
+                        {
+                            Id = 4,
                             Brand = "Sony",
                             CategoryId = 3,
                             Description = "Noise-cancelling wireless headphones",
@@ -376,72 +383,7 @@ namespace Techly.DAL.Migrations
                         },
                         new
                         {
-                            Id = 4,
-                            Brand = "Logitech",
-                            CategoryId = 1,
-                            Description = "Advanced wireless mouse",
-                            ListPrice = 3000.0,
-                            Price = 2800.0,
-                            Price100 = 2500.0,
-                            Price50 = 2600.0,
-                            SKU = "ACC-002",
-                            Title = "Logitech MX Master 3"
-                        },
-                        new
-                        {
                             Id = 5,
-                            Brand = "HP",
-                            CategoryId = 5,
-                            Description = "2-in-1 convertible laptop",
-                            ListPrice = 27000.0,
-                            Price = 26000.0,
-                            Price100 = 24000.0,
-                            Price50 = 25000.0,
-                            SKU = "LAP-002",
-                            Title = "HP Spectre x360"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Brand = "Apple",
-                            CategoryId = 3,
-                            Description = "True wireless earbuds with ANC",
-                            ListPrice = 9500.0,
-                            Price = 9200.0,
-                            Price100 = 8600.0,
-                            Price50 = 8900.0,
-                            SKU = "AUD-002",
-                            Title = "Apple AirPods Pro 2"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Brand = "Baseus",
-                            CategoryId = 2,
-                            Description = "Dual USB fast car charger",
-                            ListPrice = 700.0,
-                            Price = 650.0,
-                            Price100 = 550.0,
-                            Price50 = 600.0,
-                            SKU = "CHG-001",
-                            Title = "Baseus Car Charger"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Brand = "Xiaomi",
-                            CategoryId = 4,
-                            Description = "Fitness tracker with AMOLED display",
-                            ListPrice = 2000.0,
-                            Price = 1900.0,
-                            Price100 = 1700.0,
-                            Price50 = 1800.0,
-                            SKU = "GAD-002",
-                            Title = "Xiaomi Smart Band 7"
-                        },
-                        new
-                        {
-                            Id = 9,
                             Brand = "Samsung",
                             CategoryId = 4,
                             Description = "Smartwatch with health tracking",
@@ -454,40 +396,69 @@ namespace Techly.DAL.Migrations
                         },
                         new
                         {
-                            Id = 10,
-                            Brand = "Anker",
+                            Id = 6,
+                            Brand = "Logitech",
+                            CategoryId = 1,
+                            Description = "Advanced wireless mouse",
+                            ListPrice = 3000.0,
+                            Price = 2800.0,
+                            Price100 = 2500.0,
+                            Price50 = 2600.0,
+                            SKU = "ACC-002",
+                            Title = "Logitech MX Master 3"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Brand = "HP",
+                            CategoryId = 5,
+                            Description = "2-in-1 convertible laptop",
+                            ListPrice = 27000.0,
+                            Price = 26000.0,
+                            Price100 = 24000.0,
+                            Price50 = 25000.0,
+                            SKU = "LAP-002",
+                            Title = "HP Spectre x360"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Brand = "Apple",
+                            CategoryId = 3,
+                            Description = "True wireless earbuds with ANC",
+                            ListPrice = 9500.0,
+                            Price = 9200.0,
+                            Price100 = 8600.0,
+                            Price50 = 8900.0,
+                            SKU = "AUD-002",
+                            Title = "Apple AirPods Pro 2"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Brand = "Baseus",
                             CategoryId = 2,
-                            Description = "Fast charging portable power bank",
-                            ListPrice = 1500.0,
-                            Price = 1400.0,
-                            Price100 = 1200.0,
-                            Price50 = 1300.0,
-                            SKU = "ACC-001",
-                            Title = "Anker Power Bank 20000mAh"
+                            Description = "Dual USB fast car charger",
+                            ListPrice = 700.0,
+                            Price = 650.0,
+                            Price100 = 550.0,
+                            Price50 = 600.0,
+                            SKU = "CHG-001",
+                            Title = "Baseus Car Charger"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Brand = "Xiaomi",
+                            CategoryId = 4,
+                            Description = "Fitness tracker with AMOLED display",
+                            ListPrice = 2000.0,
+                            Price = 1900.0,
+                            Price100 = 1700.0,
+                            Price50 = 1800.0,
+                            SKU = "GAD-002",
+                            Title = "Xiaomi Smart Band 7"
                         });
-                });
-
-            modelBuilder.Entity("Techly.DAL.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
