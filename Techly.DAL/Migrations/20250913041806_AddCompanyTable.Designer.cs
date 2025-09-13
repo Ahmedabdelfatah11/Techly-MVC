@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Techly.DAL.Context;
 
@@ -11,9 +12,11 @@ using Techly.DAL.Context;
 namespace Techly.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250913041806_AddCompanyTable")]
+    partial class AddCompanyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,48 +315,6 @@ namespace Techly.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Giza",
-                            Name = "Techly Solutions",
-                            PhoneNumber = "01000000001",
-                            PostalCode = "12511",
-                            State = "GZ",
-                            StreetAdress = "123 Nile St."
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "Cairo",
-                            Name = "Smart Gadgets Co.",
-                            PhoneNumber = "01000000002",
-                            PostalCode = "11835",
-                            State = "C",
-                            StreetAdress = "45 Smart Village"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Cairo",
-                            Name = "Future Electronics",
-                            PhoneNumber = "01000000003",
-                            PostalCode = "11511",
-                            State = "C",
-                            StreetAdress = "78 Tahrir Square"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            City = "Alexandria",
-                            Name = "NextGen Devices",
-                            PhoneNumber = "01000000004",
-                            PostalCode = "21919",
-                            State = "ALX",
-                            StreetAdress = "12 Corniche Rd."
-                        });
                 });
 
             modelBuilder.Entity("Techly.DAL.Models.Product", b =>
@@ -544,9 +505,6 @@ namespace Techly.DAL.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -559,8 +517,6 @@ namespace Techly.DAL.Migrations
 
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -625,15 +581,6 @@ namespace Techly.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Techly.DAL.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("Techly.DAL.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }

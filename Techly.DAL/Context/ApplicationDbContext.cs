@@ -19,6 +19,7 @@ namespace Techly.DAL.Context
         }
         public DbSet<Category>  Categories { get; set; }
         public DbSet<Product>  Products { get; set; }
+        public DbSet<Company>  Companies { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,50 @@ namespace Techly.DAL.Context
                  new Category { Id = 4, Name = "Smart Gadgets", DisplayOrder = 4 },
                  new Category { Id = 5, Name = "Laptops & PCs", DisplayOrder = 5 }
             );
+            // Seed Companies
+            modelBuilder.Entity<Company>().HasData(
+                new Company
+                {
+                    Id = 1,
+                    Name = "Techly Solutions",
+                    StreetAdress = "123 Nile St.",
+                    City = "Giza",
+                    State = "GZ",
+                    PostalCode = "12511",
+                    PhoneNumber = "01000000001"
+                },
+                new Company
+                {
+                    Id = 2,
+                    Name = "Smart Gadgets Co.",
+                    StreetAdress = "45 Smart Village",
+                    City = "Cairo",
+                    State = "C",
+                    PostalCode = "11835",
+                    PhoneNumber = "01000000002"
+                },
+                new Company
+                {
+                    Id = 3,
+                    Name = "Future Electronics",
+                    StreetAdress = "78 Tahrir Square",
+                    City = "Cairo",
+                    State = "C",
+                    PostalCode = "11511",
+                    PhoneNumber = "01000000003"
+                },
+                new Company
+                {
+                    Id = 4,
+                    Name = "NextGen Devices",
+                    StreetAdress = "12 Corniche Rd.",
+                    City = "Alexandria",
+                    State = "ALX",
+                    PostalCode = "21919",
+                    PhoneNumber = "01000000004"
+                }
+            );
+
 
             // Seed Products
             modelBuilder.Entity<Product>().HasData(
