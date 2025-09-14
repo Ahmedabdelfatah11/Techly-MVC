@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Techly.BLL.Interfaces;
 using Techly.DAL.Models;
@@ -32,6 +34,29 @@ namespace Techly.Presentation.Areas.Customer.Controllers
                 Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category")
             };
             return View(cart);
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userId;
+
+            ShoppingCart cartFromDB = _unitOfWork.ShoppingCart.Get(u=>u.ApplicationUserId== userId && u.ProductId==shoppingCart.ProductId);
+            if (cartFromDB !=null)
+            {
+                cartFromDB.Count += shoppingCart.Count;
+                _unitOfWork.ShoppingCart.Update(cartFromDB);
+            }
+            else
+            {
+
+            _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+            TempData["success"] = "Cart Updated Successfully";
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
