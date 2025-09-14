@@ -25,9 +25,13 @@ namespace Techly.Presentation.Areas.Customer.Controllers
         }
         public IActionResult Details(int? productId)
         {
-            Product product= _unitOfWork.Product.Get(u=>u.Id== productId, includeProperties: "Category");
-
-            return View(product);
+            ShoppingCart cart = new()
+            {
+                Count = 1,
+                ProductId = productId ?? 1,
+                Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category")
+            };
+            return View(cart);
         }
 
         public IActionResult Privacy()
