@@ -25,12 +25,13 @@ namespace Techly.Presentation.Areas.Customer.Controllers
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             ShoppingCartVm = new()
             {
-                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product")
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product"),
+                OrderHeader = new() 
             };
             foreach (var cart in ShoppingCartVm.ShoppingCartList)
             {
                 cart.Price = GetPriceBasedOnQuantity(cart);
-                ShoppingCartVm.OrderTotal += (cart.Price * cart.Count);
+                ShoppingCartVm.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
 
             return View(ShoppingCartVm);
