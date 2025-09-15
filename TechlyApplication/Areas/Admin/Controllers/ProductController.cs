@@ -61,20 +61,34 @@ namespace Techly.Presentation.Areas.Admin.Controllers
                 if (formFile != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
-                    var uploads = Path.Combine(wwwRootPath, @"images\products");
+
+                    // Combine paths correctly for Linux
+                    var uploads = Path.Combine(wwwRootPath, "images", "products");
+
+                    // Ensure the directory exists
+                    if (!Directory.Exists(uploads))
+                    {
+                        Directory.CreateDirectory(uploads);
+                    }
+
+                    // Delete old image if exists
                     if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
                     {
-                        var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+                        var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\', '/'));
                         if (System.IO.File.Exists(oldImagePath))
                         {
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-                        using (var fileStreams = new FileStream(Path.Combine(uploads, fileName ), FileMode.Create))
+
+                    // Save the new file
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                     {
                         formFile.CopyTo(fileStreams);
                     }
-                    productVM.Product.ImageUrl = @"\images\products\" + fileName ;
+
+                    // Save relative path
+                    productVM.Product.ImageUrl = Path.Combine("images", "products", fileName).Replace("\\", "/");
                 }
                 if (productVM.Product.Id==0)
                 {

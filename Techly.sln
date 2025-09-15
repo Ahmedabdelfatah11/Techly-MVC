@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Techly.DAL", "Techly.DAL\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{CEFB2B40-5F8A-46AF-B414-AB57EE73B113}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FC62BBD8-E731-4D67-957A-D66BC0C0B0F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{CEFB2B40-5F8A-46AF-B414-AB57EE73B113}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEFB2B40-5F8A-46AF-B414-AB57EE73B113}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEFB2B40-5F8A-46AF-B414-AB57EE73B113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC62BBD8-E731-4D67-957A-D66BC0C0B0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC62BBD8-E731-4D67-957A-D66BC0C0B0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC62BBD8-E731-4D67-957A-D66BC0C0B0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC62BBD8-E731-4D67-957A-D66BC0C0B0F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

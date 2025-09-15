@@ -1,0 +1,33 @@
+# Base runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["TechlyApplication/Techly.Presentation.csproj", "TechlyApplication/"]
+COPY ["Techly.BLL/Techly.BLL.csproj", "Techly.BLL/"]
+COPY ["Techly.DAL/Techly.DAL.csproj", "Techly.DAL/"]
+COPY ["Utility/Utility.csproj", "Utility/"]
+RUN dotnet restore "TechlyApplication/Techly.Presentation.csproj"
+COPY . .
+WORKDIR "/src/TechlyApplication"
+RUN dotnet build "Techly.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Publish stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Techly.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Final runtime image
+FROM base AS final
+WORKDIR /app
+
+# Set environment so ASP.NET picks appsettings.Docker.json
+ENV ASPNETCORE_ENVIRONMENT=Docker
+
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Techly.Presentation.dll"]
+
