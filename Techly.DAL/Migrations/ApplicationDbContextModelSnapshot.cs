@@ -426,11 +426,11 @@ namespace Techly.DAL.Migrations
                     b.Property<string>("PaymentIntenId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentNumber")
-                        .IsRequired()
+                    b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")

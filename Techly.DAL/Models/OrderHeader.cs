@@ -27,7 +27,7 @@ namespace Techly.DAL.Models
         public DateOnly PaymentDueDate { get; set; }
         public string? PaymentIntenId { get; set; }
         [Required]
-        public string PaymentNumber { get; set; }
+        public string PhoneNumber { get; set; }
         [Required]
         public string StreetAddress { get; set; }
         [Required]

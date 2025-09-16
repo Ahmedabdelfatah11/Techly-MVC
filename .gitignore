@@ -78,3 +78,7 @@ artifacts/
 
 # Microsoft Azure Web App publish settings
 *.PublishSettings
+docker-compose.override.yml
+.env
+.env.txt
+
