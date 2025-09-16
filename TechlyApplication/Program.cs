@@ -5,6 +5,8 @@ using Techly.DAL.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Data.SqlClient;
+using Utility;
+using Stripe;
 
 namespace TechlyApplication
 {
@@ -18,6 +20,8 @@ namespace TechlyApplication
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 options.SignIn.RequireConfirmedAccount = true)
@@ -65,11 +69,13 @@ namespace TechlyApplication
 
             // REMOVE HTTPS and force HTTP usage
             // app.UseHttpsRedirection();  // Comment or remove this line
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapStaticAssets();
             app.MapRazorPages();
             app.MapControllerRoute(

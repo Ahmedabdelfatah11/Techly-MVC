@@ -14,13 +14,39 @@ namespace Techly.BLL.Repository
     {
         private readonly ApplicationDbContext _db;
 
-        public OrderHeaderRepository(ApplicationDbContext db):base(db)
+        public OrderHeaderRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
         public void Update(OrderHeader category)
         {
             _db.OrderHeaders.Update(category);
+        }
+
+        public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
+        {
+            var orderFromDb = _db.OrderHeaders.FirstOrDefault(x => x.Id == id);
+            if (orderFromDb != null)
+            {
+                orderFromDb.OrderStatus = orderStatus;
+                if (!string.IsNullOrEmpty(paymentStatus))
+                    orderFromDb.PaymentStatus = paymentStatus;
+            }
+        }
+
+        public void UpdateStripePaymentId(int id, string sessionId, string? paymentIntentId = null)
+        {
+            var orderFromDb = _db.OrderHeaders.FirstOrDefault(x => x.Id == id);
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                orderFromDb.SessionId= sessionId;
+            }
+            if (!string.IsNullOrEmpty(paymentIntentId))
+            {
+                orderFromDb.PaymentIntenId = paymentIntentId;
+                orderFromDb.PaymentDate = DateTime.Now;
+            }
+
         }
     }
 }
