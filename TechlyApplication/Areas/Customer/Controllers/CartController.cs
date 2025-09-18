@@ -73,13 +73,22 @@ namespace Techly.Presentation.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCartVm.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product");
+            ShoppingCartVm.ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(
+                u => u.ApplicationUserId == userId,
+                includeProperties: "Product"
+            );
+
+            if (!ShoppingCartVm.ShoppingCartList.Any())
+            {
+                // Redirect back to cart if empty
+                TempData["Error"] = "Your cart is empty. Please add items before checkout.";
+                return RedirectToAction(nameof(Index));
+            }
+
             ShoppingCartVm.OrderHeader.OrderDate = DateTime.Now;
             ShoppingCartVm.OrderHeader.ApplicationUserId = userId;
 
             ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
-
-
 
             foreach (var cart in ShoppingCartVm.ShoppingCartList)
             {
@@ -97,8 +106,10 @@ namespace Techly.Presentation.Areas.Customer.Controllers
                 ShoppingCartVm.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
                 ShoppingCartVm.OrderHeader.OrderStatus = SD.StatusApproved;
             }
+
             _unitOfWork.OrderHeader.Add(ShoppingCartVm.OrderHeader);
             _unitOfWork.Save();
+
             foreach (var cart in ShoppingCartVm.ShoppingCartList)
             {
                 OrderDetail orderDetail = new()
@@ -109,48 +120,61 @@ namespace Techly.Presentation.Areas.Customer.Controllers
                     Count = cart.Count
                 };
                 _unitOfWork.OrderDetail.Add(orderDetail);
-                _unitOfWork.Save();
             }
+            _unitOfWork.Save();
+
+            // Stripe session only if company is 0
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
                 var domain = "https://localhost:44393/";
-                var options = new Stripe.Checkout.SessionCreateOptions
+                var options = new SessionCreateOptions
                 {
-                    SuccessUrl = domain+ $"customer/cart/OrderConfirmation?id={ShoppingCartVm.OrderHeader.Id}",
+                    SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVm.OrderHeader.Id}",
                     CancelUrl = domain + "customer/cart/index",
-                    LineItems = new List<Stripe.Checkout.SessionLineItemOptions>(),
-              
                     Mode = "payment",
+                    LineItems = new List<SessionLineItemOptions>()
                 };
 
-                foreach(var item in ShoppingCartVm.ShoppingCartList)
+                foreach (var item in ShoppingCartVm.ShoppingCartList)
                 {
-                    var sessionLineItem = new Stripe.Checkout.SessionLineItemOptions
+                    options.LineItems.Add(new SessionLineItemOptions
                     {
-                        PriceData = new Stripe.Checkout.SessionLineItemPriceDataOptions
+                        PriceData = new SessionLineItemPriceDataOptions
                         {
                             UnitAmount = (long)(item.Price * 100),
                             Currency = "usd",
-                            ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
                                 Name = item.Product.Title,
                             },
                         },
                         Quantity = item.Count,
-                    };
-                    options.LineItems.Add(sessionLineItem);
+                    });
+                }
+
+                if (!options.LineItems.Any())
+                {
+                    TempData["Error"] = "Cannot proceed to checkout with empty items.";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 var service = new SessionService();
-                Session session = service.Create(options);
-                _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCartVm.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                var session = service.Create(options);
+
+                _unitOfWork.OrderHeader.UpdateStripePaymentId(
+                    ShoppingCartVm.OrderHeader.Id,
+                    session.Id,
+                    session.PaymentIntentId
+                );
                 _unitOfWork.Save();
+
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
             }
 
             return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVm.OrderHeader.Id });
         }
+
 
         public IActionResult OrderConfirmation(int id)
         {
