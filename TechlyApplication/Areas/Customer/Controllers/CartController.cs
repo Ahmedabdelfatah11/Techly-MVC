@@ -215,10 +215,13 @@ namespace Techly.Presentation.Areas.Customer.Controllers
         }
         public IActionResult Minus(int cartId)
         {
-            var carFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            var carFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId,tracked:true);
             if (carFromDb.Count <= 1)
             {
                 _unitOfWork.ShoppingCart.Delete(carFromDb);
+                HttpContext.Session.SetInt32(SD.SessionCart,
+              _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == carFromDb.ApplicationUserId).Count()-1);
+
             }
             else
             {
@@ -230,8 +233,10 @@ namespace Techly.Presentation.Areas.Customer.Controllers
         }
         public IActionResult Remove(int cartId)
         {
-            var carFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            var carFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId,tracked:true);
             _unitOfWork.ShoppingCart.Delete(carFromDb);
+            HttpContext.Session.SetInt32(SD.SessionCart,
+                _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == carFromDb.ApplicationUserId).Count()-1);
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
