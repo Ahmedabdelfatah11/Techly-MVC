@@ -34,6 +34,11 @@ namespace TechlyApplication
                 options.LogoutPath = "/Identity/Account/Logout";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
+            builder.Services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = "661340587021445";
+                options.AppSecret = "95958a9556178e69364ebc07ab8bc0bf";
+            });
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {

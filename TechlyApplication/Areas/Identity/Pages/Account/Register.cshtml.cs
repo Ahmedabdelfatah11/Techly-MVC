@@ -29,7 +29,7 @@ namespace Techly.Presentation.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager; 
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
@@ -113,7 +113,7 @@ namespace Techly.Presentation.Areas.Identity.Pages.Account
             public string? Role { get; set; }
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
-            
+
             [Required]
             public string Name { get; set; }
             public string? StreetAddress { get; set; }
@@ -129,26 +129,27 @@ namespace Techly.Presentation.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!_roleManager.RoleExistsAsync(SD.Role_User_Customer).GetAwaiter().GetResult()) {
+            if (!_roleManager.RoleExistsAsync(SD.Role_User_Customer).GetAwaiter().GetResult())
+            {
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Customer)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Company)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
-                }
-            Input = new ()
+            }
+            Input = new()
             {
                 RoleList = _roleManager.Roles.Select(r => r.Name).Select(r => new SelectListItem
                 {
                     Text = r,
                     Value = r
                 }),
-                  CompanyList = _unitOfWork.Company.GetAll().Select(r => new SelectListItem
-                  {
-                      Text = r.Name,
-                      Value = r.Id.ToString()
-                  })
+                CompanyList = _unitOfWork.Company.GetAll().Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Id.ToString()
+                })
             };
-                
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -170,7 +171,7 @@ namespace Techly.Presentation.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
 
-                if(Input.Role == SD.Role_User_Company)
+                if (Input.Role == SD.Role_User_Company)
                 {
                     user.CompanyId = Input.CompanyId;
                 }
@@ -181,7 +182,7 @@ namespace Techly.Presentation.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if(!string.IsNullOrEmpty(Input.Role))
+                    if (!string.IsNullOrEmpty(Input.Role))
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
                     }
@@ -208,18 +209,26 @@ namespace Techly.Presentation.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        if (User.IsInRole(SD.Role_Admin))
+                        {
+                            TempData["success"] = "New User Created Successfully";
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                 }
-            }
 
-            // If we got this far, something failed, redisplay form
-            return Page();
+                // If we got this far, something failed, redisplay form
+                return Page();
+            
         }
 
         private ApplicationUser CreateUser()
