@@ -36,7 +36,13 @@ FROM base AS final
 WORKDIR /app
 
 # Copy published files
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish ./
+
+# Copy all appsettings.*.json files
+COPY TechlyApplication/appsettings.json ./ 
+COPY TechlyApplication/appsettings.Development.json ./ 
+COPY TechlyApplication/appsettings.Docker.json ./ 
+
 
 
 

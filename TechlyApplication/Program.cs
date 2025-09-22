@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Data.SqlClient;
 using Utility;
 using Stripe;
+using Techly.DAL.DbInitializer;
 
 namespace TechlyApplication
 {
@@ -15,6 +16,12 @@ namespace TechlyApplication
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration
+     .SetBasePath(Directory.GetCurrentDirectory())
+     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+     .AddJsonFile("appsettings.Docker.json", optional: true)
+     .AddEnvironmentVariables();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -47,6 +54,7 @@ namespace TechlyApplication
                 options.Cookie.IsEssential = true;
             });
 
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, Utility.EmailSender>();
@@ -82,7 +90,7 @@ namespace TechlyApplication
 
             // REMOVE HTTPS and force HTTP usage
             // app.UseHttpsRedirection();  // Comment or remove this line
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
@@ -90,6 +98,7 @@ namespace TechlyApplication
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
+            SeedDatabase();
             app.MapStaticAssets();
             app.MapRazorPages();
             app.MapControllerRoute(
@@ -98,6 +107,15 @@ namespace TechlyApplication
                 .WithStaticAssets();
 
             app.Run();
+            void SeedDatabase()
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                    dbInitializer.Initialize();
+                }
+            }
         }
     }
 }
+

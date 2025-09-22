@@ -20,7 +20,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:8080  
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=TechlyDb;User Id=sa;Password=YourStrongP@ssw0rd123;TrustServerCertificate=True
     depends_on:
       - sqlserver
     ports:

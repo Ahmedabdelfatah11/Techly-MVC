@@ -47,7 +47,7 @@ namespace Techly.DAL.Context
                     City = "Giza",
                     State = "GZ",
                     PostalCode = "12511",
-                    PhoneNumber = "01000000001"
+                    PhoneNumber = "01000000001",
                 },
                 new Company
                 {
@@ -95,7 +95,8 @@ namespace Techly.DAL.Context
                     Price = 24000,
                     Price50 = 23000,
                     Price100 = 22000,
-                    CategoryId = 5
+                    CategoryId = 5,
+                    ImageUrl = "\\images\\products\\7b9d5466-63ae-4677-8708-2ee746e4def6.jpg"
                 },
                 new Product
                 {
@@ -108,7 +109,8 @@ namespace Techly.DAL.Context
                     Price = 34000,
                     Price50 = 33000,
                     Price100 = 32000,
-                    CategoryId = 4
+                    CategoryId = 4,
+                    ImageUrl= "\\images\\products\\e33ddb5e-ca89-4170-b800-8def13749329.webp"
                 },
                 new Product
                 {
@@ -121,7 +123,8 @@ namespace Techly.DAL.Context
                     Price = 11500,
                     Price50 = 11000,
                     Price100 = 10500,
-                    CategoryId = 3
+                    CategoryId = 3,
+                    ImageUrl= "images/products/79062201-5c25-4de0-9e10-3fc5153fb4f5.webp"
                 },
                 new Product
                 {
@@ -134,7 +137,8 @@ namespace Techly.DAL.Context
                     Price = 2800,
                     Price50 = 2600,
                     Price100 = 2500,
-                    CategoryId = 1
+                    CategoryId = 1,
+                    ImageUrl = "images/products/57595f92-e108-4ba1-b562-da3d95056a22.png"
                 },
                 new Product
                 {
@@ -147,7 +151,8 @@ namespace Techly.DAL.Context
                     Price = 26000,
                     Price50 = 25000,
                     Price100 = 24000,
-                    CategoryId = 5
+                    CategoryId = 5,
+                    ImageUrl = "images/products/5792afe8-6bdd-4356-8fc3-4c1b6217c6d2.jpg"
                 },
                 new Product
                 {
@@ -160,7 +165,8 @@ namespace Techly.DAL.Context
                     Price = 9200,
                     Price50 = 8900,
                     Price100 = 8600,
-                    CategoryId = 3
+                    CategoryId = 3,
+                    ImageUrl = "images/products/0493017b-a468-4e7b-b951-4b48c3e33728.png"
                 },
                 new Product
                 {
@@ -173,7 +179,8 @@ namespace Techly.DAL.Context
                     Price = 650,
                     Price50 = 600,
                     Price100 = 550,
-                    CategoryId = 2
+                    CategoryId = 2,
+                    ImageUrl = "images/products/81155a81-825c-4d08-b3bf-d2f3a9182abf.jpg"
                 },
                 new Product
                 {
@@ -186,7 +193,8 @@ namespace Techly.DAL.Context
                     Price = 1900,
                     Price50 = 1800,
                     Price100 = 1700,
-                    CategoryId = 4
+                    CategoryId = 4,
+                    ImageUrl = "images/products/9d27ef06-7799-451d-9bd2-45c4e47680ad.webp"
                 },
                    new Product
                    {
@@ -199,7 +207,8 @@ namespace Techly.DAL.Context
                        Price = 7700,
                        Price50 = 7400,
                        Price100 = 7100,
-                       CategoryId = 4
+                       CategoryId = 4,
+                       ImageUrl = "images/products/8d9aa883-5612-4056-b0b6-f526aeefbff6.webp"
                    },
                    new Product
                    {
@@ -212,7 +221,8 @@ namespace Techly.DAL.Context
                        Price = 1400,
                        Price50 = 1300,
                        Price100 = 1200,
-                       CategoryId = 2
+                       CategoryId = 2,
+                       ImageUrl = "images/products/0e7bc177-a2f9-4d0e-8efb-9a6c0629002e.webp"
                    }
 
             );
