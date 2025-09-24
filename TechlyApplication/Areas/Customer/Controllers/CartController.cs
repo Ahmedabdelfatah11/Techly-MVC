@@ -14,12 +14,15 @@ namespace Techly.Presentation.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _configuration;
+
         [BindProperty]
         public ShoppingCartVm ShoppingCartVm { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork,IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -126,7 +129,8 @@ namespace Techly.Presentation.Areas.Customer.Controllers
             // Stripe session only if company is 0
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
-                var domain = "https://localhost:44393/";
+                var domain = _configuration["AppSettings:Domain"];
+
                 var options = new SessionCreateOptions
                 {
                     SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVm.OrderHeader.Id}",

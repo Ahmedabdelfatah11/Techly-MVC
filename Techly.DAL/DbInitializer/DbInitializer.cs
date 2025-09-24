@@ -29,13 +29,13 @@ namespace Techly.DAL.DbInitializer
         {
             try
             {
-                if(_db.Database.GetPendingMigrations().Count()>0)
+                if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
                     _db.Database.Migrate();
                 }
             }
-            catch(Exception ex)
-            {
+            catch (Exception ex)
+            { }
                 if (!_roleManager.RoleExistsAsync(SD.Role_User_Customer).GetAwaiter().GetResult())
                 {
                     _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Customer)).GetAwaiter().GetResult();
@@ -65,4 +65,4 @@ namespace Techly.DAL.DbInitializer
             }
         }
     }
-}
+

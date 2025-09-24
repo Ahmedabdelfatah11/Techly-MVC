@@ -20,6 +20,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:8080  
+      - AppSettings__Domain=http://localhost:8080/
     depends_on:
       - sqlserver
     ports:
