@@ -21,12 +21,6 @@ namespace TechlyApplication
 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
 .AddEnvironmentVariables();
-            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (!string.IsNullOrEmpty(env))
-            {
-                builder.Environment.EnvironmentName = env;
-            }
-
 
 
             // Add services to the container.
