@@ -17,11 +17,17 @@ namespace TechlyApplication
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Configuration
-     .SetBasePath(Directory.GetCurrentDirectory())
-     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-     .AddJsonFile("appsettings.Docker.json", optional: true)
-     .AddEnvironmentVariables();
+.SetBasePath(Directory.GetCurrentDirectory())
+.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+.AddEnvironmentVariables();
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (!string.IsNullOrEmpty(env))
+            {
+                builder.Environment.EnvironmentName = env;
+            }
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

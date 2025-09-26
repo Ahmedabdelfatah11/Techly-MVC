@@ -30,6 +30,7 @@
 	<ItemGroup>
 		<Folder Include="Areas\Admin\Views\Category\PartialView\" />
 		<Folder Include="Areas\Identity\Data\" />
+		<None Update="Properties\launchSettings.json" CopyToOutputDirectory="Never" />
 	</ItemGroup>
 
 </Project>

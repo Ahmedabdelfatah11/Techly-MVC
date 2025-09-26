@@ -35,6 +35,12 @@ RUN dotnet publish "Techly.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/
 FROM base AS final
 WORKDIR /app
 
+
+# Explicitly set environment for Docker runtime
+ENV ASPNETCORE_ENVIRONMENT=Docker
+
+
+
 # Copy published files
 COPY --from=publish /app/publish ./
 
